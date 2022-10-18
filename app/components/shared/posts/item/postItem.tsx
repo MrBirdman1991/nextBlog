@@ -6,7 +6,7 @@ import classes from "./post-item.module.css"
 export interface SinglePost {
   title: string,
   image: string,
-  date: Date,
+  date: string,
   excerpt: string,
   slug: string
 }
@@ -21,14 +21,15 @@ export const PostItem: FC<SinglePost> = ({date, excerpt, image, slug, title}) =>
     year: "numeric"
   })
 
-  const imagePath = `/images/posts/${slug}/${image}`;
+  const linkPath = `/posts/${slug}`
+  const imagePath = `/images/posts/${image}`;
 
   return (
     <li className={classes.post}>
-      <Link href="/">
+      <Link href={linkPath}>
         <a>
           <div className={classes.image}>
-            <Image src={imagePath} alt={title} width={300} height={200} />
+            <Image src={imagePath} alt={title} layout="responsive" width={300} height={200} />
           </div>
           <div className={classes.content}>
             <h3>{title}</h3>

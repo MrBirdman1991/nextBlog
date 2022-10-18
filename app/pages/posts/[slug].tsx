@@ -2,7 +2,7 @@ import { NextPage } from "next"
 
 const SinglePostPage: NextPage = () => {
   return (
-    <div>ContactPage</div>
+    <div>Single Post Page</div>
   )
 }
 
