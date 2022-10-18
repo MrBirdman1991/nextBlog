@@ -1,8 +1,9 @@
 import { NextPage } from "next"
+import PostContent from "../../components/shared/posts/detail/postContent";
 
 const SinglePostPage: NextPage = () => {
   return (
-    <div>Single Post Page</div>
+    <PostContent/>
   )
 }
 
