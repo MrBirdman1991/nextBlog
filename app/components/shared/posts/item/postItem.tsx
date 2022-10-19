@@ -1,15 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FC } from "react";
+import { SinglePost } from "../../../../helpers/posts-util";
 import classes from "./post-item.module.css"
 
-export interface SinglePost {
-  title: string,
-  image: string,
-  date: string,
-  excerpt: string,
-  slug: string
-}
 
 
 

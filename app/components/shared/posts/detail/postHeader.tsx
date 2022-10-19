@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import {FC} from 'react'
-import { SinglePost } from '../item/postItem'
+import { SinglePost } from '../../../../helpers/posts-util'
+
 
 import classes from "./post-header.module.css"
 

@@ -1,6 +1,7 @@
 import {FC} from 'react'
+import { SinglePost } from '../../../../helpers/posts-util'
 import { PostsGrid } from '../grid/postsGrid'
-import { SinglePost } from '../item/postItem'
+
 import classes from "./all-posts.module.css"
 
 interface Props{

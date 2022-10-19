@@ -1,14 +1,32 @@
-import { NextPage } from "next"
+import {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  NextPage,
+} from "next";
 import AllPosts from "../../components/shared/posts/all/allPosts";
-import { DUMMY_POSTS } from "..";
+import { getAllPosts, SinglePost } from "../../helpers/posts-util";
 
-const AllPostsPage: NextPage = () => {
+type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
+
+const AllPostsPage: NextPage<PageProps> = ({ posts }) => {
   return (
     <>
-      <AllPosts posts={DUMMY_POSTS}/>
+      <AllPosts posts={posts} />
     </>
-  )
-}
+  );
+};
+
+export const getServerSideProps: GetServerSideProps<{
+  posts: SinglePost[];
+}> = async () => {
+  const allPosts = getAllPosts();
+  return {
+    props: {
+      posts: allPosts,
+    },
+  };
+};
+
 
 
 export default AllPostsPage;

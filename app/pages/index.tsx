@@ -1,46 +1,28 @@
-import { NextPage } from "next";
+import { GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import { FeaturedPosts } from "../components/home/featured/featuredPosts";
 import { HeroSection } from "../components/home/hero/hero";
-import { SinglePost } from "../components/shared/posts/item/postItem";
+import { getFeaturedPosts, SinglePost } from "../helpers/posts-util";
 
-export const DUMMY_POSTS: SinglePost[] = [
-  {
-    slug: "read-more-about-schwobsies1",
-    title: "Read more about schwobsies",
-    image: "keksdose_shop_vorlage.jpg",
-    excerpt: "Lern more about the fantastic world of a schwobsie",
-    date: "2022-02-10",
-  },
-  {
-    slug: "read-more-about-schwobsies2",
-    title: "Read more about schwobsies",
-    image: "keksdose_shop_vorlage.jpg",
-    excerpt: "Lern more about the fantastic world of a schwobsie",
-    date: "2022-02-10",
-  },
-  {
-    slug: "read-more-about-schwobsies3",
-    title: "Read more about schwobsies",
-    image: "keksdose_shop_vorlage.jpg",
-    excerpt: "Lern more about the fantastic world of a schwobsie",
-    date: "2022-02-10",
-  },
-  {
-    slug: "read-more-about-schwobsies4",
-    title: "Read more about schwobsies",
-    image: "keksdose_shop_vorlage.jpg",
-    excerpt: "Lern more about the fantastic world of a schwobsie",
-    date: "2022-02-10",
-  },
-];
+type PageProps = InferGetStaticPropsType<typeof getStaticProps>;
 
-const HomePage: NextPage = () => {
+const HomePage: NextPage<PageProps> = ({posts}) => {
+
   return (
     <>
       <HeroSection />
-      <FeaturedPosts posts={DUMMY_POSTS} />
+      <FeaturedPosts posts={posts} />
     </>
   );
 };
+
+export const getStaticProps: GetStaticProps<{posts: SinglePost[]}> = () => {
+  const featuredPosts = getFeaturedPosts();
+  return {
+    props: {
+      posts: featuredPosts
+    },
+    revalidate: 1800
+  }
+}
 
 export default HomePage;
