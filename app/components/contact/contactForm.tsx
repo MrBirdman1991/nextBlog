@@ -1,25 +1,79 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import classes from "./contact-form.module.css";
+import Notification, {
+  INotification,
+  RequestStatus,
+} from "../shared/ui/notification";
 
 const ContactForm: FC = () => {
-  const [formState, setFormState] = useState({
-    email: "",
-    name: "",
-    message: "",
-  });
+    const initialFormState = {
+        email: "",
+        name: "",
+        message: "",
+      }
+  const [formState, setFormState] = useState({...initialFormState});
+
+  const [requestStatus, setRequestStatus] = useState<RequestStatus | null>();
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout>;
+    if(requestStatus === "success" || requestStatus === "error"){
+       timeout = setTimeout(() => {
+            setRequestStatus(null);
+        }, 1500)
+    }
+
+    return () => clearTimeout(timeout)
+  }, [requestStatus])
 
   async function submitHandler(e: React.FormEvent) {
     e.preventDefault();
-    const data = await fetch("/api/contact", {
-      method: "POST",
-      body: JSON.stringify(formState),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-    const parsedData = await data.json()
+    setRequestStatus("pending");
 
-    console.log(parsedData)
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        body: JSON.stringify(formState),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Something went wrong");
+      setRequestStatus("success");
+
+      setFormState({...initialFormState})
+
+    } catch (err) {
+      setRequestStatus("error");
+    }
+  }
+
+  let notification: INotification | null = null;
+
+  if (requestStatus === "pending") {
+    notification = {
+      status: "pending",
+      title: "Sending message...",
+      message: "waiting to process Data",
+    };
+  }
+
+  if (requestStatus === "success") {
+    notification = {
+      status: "success",
+      title: "Success",
+      message: "Message got sent",
+    };
+  }
+
+  if (requestStatus === "error") {
+    notification = {
+      status: "error",
+      title: "Error",
+      message: "Some Error occoured",
+    };
   }
 
   return (
@@ -61,12 +115,14 @@ const ContactForm: FC = () => {
               setFormState({ ...formState, message: e.target.value })
             }
             required
-          >{formState.message}</textarea>
+            value={formState.message}
+          ></textarea>
         </div>
         <div className={classes.actions}>
           <button type="submit">Send Message</button>
         </div>
       </form>
+       {notification && <Notification status={notification.status} title={notification.title} message={notification.message}/>}
     </section>
   );
 };

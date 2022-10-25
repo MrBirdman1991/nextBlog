@@ -1,12 +1,12 @@
 import {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
+  GetStaticProps,
+  InferGetStaticPropsType,
   NextPage,
 } from "next";
 import AllPosts from "../../components/shared/posts/all/allPosts";
 import { getAllPosts, SinglePost } from "../../helpers/posts-util";
 
-type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
+type PageProps = InferGetStaticPropsType<typeof getStaticProps>;
 
 const AllPostsPage: NextPage<PageProps> = ({ posts }) => {
   return (
@@ -16,7 +16,7 @@ const AllPostsPage: NextPage<PageProps> = ({ posts }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<{
+export const getStaticProps: GetStaticProps<{
   posts: SinglePost[];
 }> = async () => {
   const allPosts = getAllPosts();
@@ -24,6 +24,7 @@ export const getServerSideProps: GetServerSideProps<{
     props: {
       posts: allPosts,
     },
+    revalidate: 1800
   };
 };
 
