@@ -8,4 +8,11 @@ isFeatured: true
 
 # Hello and welcome to the great world of schwobsies
 
-let me introduce you in the wonderful day of a schwobsie
+let me introduce you in the wonderful day of a schwobsie.
+
+![Pummelhorn](pummel.jpg)
+
+
+```js
+console.log("HAI =D")
+```

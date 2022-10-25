@@ -16,17 +16,23 @@ export interface SinglePost {
     date: string,
     excerpt: string,
     slug: string
+    content: string
   }
   
 
 const postsDirectory = path.join(process.cwd(), "posts");
 
-function getPostData(fileName: string){
-    const filePath = path.join(postsDirectory, fileName);
+export function getAllFiles(){
+   return  fs.readdirSync(postsDirectory);
+}
+
+export function getPostData(slug: string){
+    const postSlug = slug.replace(/\.md$/, "");
+    const filePath = path.join(postsDirectory, `${postSlug}.md`);
     const fileContent = fs.readFileSync(filePath, "utf-8");
     const {data, content} = matter(fileContent);
 
-    const postSlug = fileName.replace(/\.md$/, "");
+   
 
     const postData = {
         slug: postSlug,
@@ -37,8 +43,10 @@ function getPostData(fileName: string){
     return postData;
 }
 
+
+
 export function getAllPosts(){
-   const fileNames = fs.readdirSync(postsDirectory);
+   const fileNames =  getAllFiles();
 
    const allPosts = fileNames.map(fileName => getPostData(fileName))
 
